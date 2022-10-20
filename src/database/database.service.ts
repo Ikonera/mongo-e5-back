@@ -31,4 +31,38 @@ export class DatabaseService {
 	getAllRestoNames = async () => {
 		return await this.restoModel.distinct("name");
 	}
+
+	getAllAScoreByBoroughAndByCuisine = async () => {
+		const cuisines = await this.restoModel.distinct("cuisine");
+		const borough = await this.restoModel.distinct("borough");
+		const ranking = await this.restoModel.aggregate([
+			{
+				$match: { "grades.grade": 'A' }
+			},
+			{
+				$project: {
+					"name": 1,
+					"cuisine": 1,
+					"borough": 1,
+					_id: 0
+				}
+			},
+			{
+				$group: {
+					"_id": "&borough",
+					total: { $sum: 1 }
+				}
+			},
+			// {
+			// 	$group: {
+			// 		"_id": "$borough",
+			// 		total: { $sum: 1}
+			// 	}
+			// }
+		])
+
+		return {
+			ranking
+		}
+	}
 }
