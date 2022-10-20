@@ -1,0 +1,39 @@
+extends template
+
+block content
+	section
+		div
+			form(method="GET")
+				label(for="resto-district") District : 
+				select#resto-district
+					each district in districts
+						option= district
+				label(for="resto-cuisine-type") Cuisine type : 
+				select#resto-cuisine-type
+					each cuisine in cuisines
+						option= cuisine
+				a#search-link Search
+		div
+			h3 Results :
+			if filteredResults
+				each resto in filteredResults
+					hr
+					div
+						p Name : #{resto.name}
+						p Cuisine : #{resto.cuisine}
+						p Address :
+						div
+							ul 
+								each val, key in resto.address
+									li= key + " : " + val
+				else
+					p No search results.
+
+	script.
+		let searchLink = document.querySelector("#search-link");
+		let districtSelect = document.querySelector("#resto-district");
+		let cuisineSelect = document.querySelector("#resto-cuisine-type");
+		searchLink.addEventListener("click", (event) => {
+			searchLink.href = `?district=${districtSelect.value}&cuisine=${cuisineSelect.value}`
+		});
+

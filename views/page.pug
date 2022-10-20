@@ -1,0 +1,32 @@
+extends template
+
+block content
+	section
+		div
+			form(method="GET")
+				input(type="text" id="search-input")
+				a#search-link Search
+		div
+			h3 Result :
+			if resto
+				p Name : #{resto.name}
+				p Cuisine : #{resto.cuisine}
+				p Address :
+				div
+					ul 
+						each val, key in resto.address
+							li= key + " : " + val
+			else
+				p No search result.
+
+	script.
+		let searchInput = document.querySelector("#search-input");
+		let searchLink = document.querySelector("#search-link");
+		searchInput.addEventListener("change", (event) => {
+			let restoName = event.target.value;
+			searchLink.href = `?name=${restoName}`;
+			console.log(searchLink.href);
+		});
+		searchLink.addEventListener("click", () => {
+			console.log("click");
+		});

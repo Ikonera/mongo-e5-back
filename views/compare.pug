@@ -1,0 +1,44 @@
+extends template
+
+block content
+	div
+		form(method=GET)
+			select#first-resto-select
+				each name in allRestoNames
+					option= name
+			select#second-resto-select
+				each name in allRestoNames
+					option= name
+			a#compare-button Compare
+	
+	div
+		if firstResto && secondResto
+			table(border="1")
+				tr
+					th= firstResto.name
+					th= secondResto.name
+				tr
+					td= firstResto.borough
+					td= secondResto.borough
+				tr
+					td= firstResto.cuisine
+					td= secondResto.cuisine
+				th(colspan="2") Grades
+				tr
+					td
+						each val in firstResto.grades
+							p= "Score : " + val.score + ", rank : " + val.grade
+					td
+						each val in secondResto.grades
+							p= "Score : " + val.score + ", rank : " + val.grade
+		else
+			p There is a problem
+
+	script.
+		let compareButton = document.querySelector("#compare-button");
+		let firstRestoSelect = document.querySelector("#first-resto-select");
+		let secondRestoSelect = document.querySelector("#second-resto-select");
+		
+		compareButton.addEventListener("click", (event) => {
+			compareButton.href = `?restoNameOne=${firstRestoSelect.value}&restoNameTwo=${secondRestoSelect.value}`
+		});
